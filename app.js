@@ -8,6 +8,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var bugsnag = require('bugsnag');
+bugsnag.register(process.env.bugsnag);
 
 var routes = require('./routes/index');
 
@@ -29,6 +31,7 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(session({ store: new RedisStore({host:'redis.fr1.server.sovechkin.com', port:6379, pass:''}), secret: process.env.SECRET }))
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bugsnag.errorHandler);
 
 app.use('/', routes);
 
