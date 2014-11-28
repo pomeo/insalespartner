@@ -25,6 +25,7 @@ if (app.get('env') !== 'development') {
 }
 app.enable('trust proxy');
 app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(bugsnag.requestHandler);
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
