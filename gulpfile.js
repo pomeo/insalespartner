@@ -86,22 +86,15 @@ gulp.task('mocha', function() {
         }));
 });
 
-gulp.task('karma', function (done) {
-  karma.start({
-    configFile: __dirname + '/test/karma/karma.conf.js',
-    singleRun: false
-  }, done);
-});
-
 gulp.task('browser-sync', function() {
   browserSync.init(null, {
     proxy: 'localhost:3000',
-    browser: ['firefox'],
+    open: false,
     port: 8080,
     notify: false
   });
 });
 
-gulp.task('default', ['minify-css', 'stylus', 'images', 'compress', 'copy-json', 'browser-sync', 'mocha', 'karma'], function () {
+gulp.task('default', ['minify-css', 'stylus', 'images', 'compress', 'copy-json', 'browser-sync'], function () {
     gulp.watch(['views/**/*.jade'], reload);
 });
