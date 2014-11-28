@@ -1,24 +1,33 @@
 var express    = require('express'),
     router     = express.Router(),
     winston    = require('winston'),
-    logger     = new (winston.Logger)({
-      transports: [
-        new (winston.transports.Console)()
-      ]
-    }),
-    debugOn    = true;
+    Logentries = require('winston-logentries');
 
-/* GET home page. */
+if (process.env.NODE_ENV === 'development') {
+  var logger = new (winston.Logger)({
+    transports: [
+      new (winston.transports.Console)()
+    ]
+  });
+} else {
+  var logger = new (winston.Logger)({
+    transports: [
+      new winston.transports.Logentries({token: process.env.logentries})
+    ]
+  });
+}
+
 router.get('/', function(req, res) {
   res.render('index', { title: 'Express' });
 });
 
 module.exports = router;
 
-//Логгер в одном месте, для упрощения перезда на любой логгер.
-function log(logMsg) {
+function log(logMsg, logType) {
   if (logMsg instanceof Error) logger.error(logMsg.stack);
-  if (debugOn) {
-      logger.info(logMsg);
+  if (logType !== undefined) {
+    logger.log(logType, logMsg);
+  } else {
+    logger.info(logMsg);
   }
 };
