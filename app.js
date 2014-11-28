@@ -29,7 +29,19 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-app.use(session({ store: new RedisStore({host:'redis.fr1.server.sovechkin.com', port:6379, pass:''}), secret: process.env.SECRET }))
+app.use(session({
+  store: new RedisStore({
+    host:process.env.redis,
+    port:6379,
+    pass:''
+  }),
+  secret: process.env.SECRET,
+  cookie: {
+    maxAge: 31536000000
+  },
+  resave: false,
+  saveUninitialized: true
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bugsnag.errorHandler);
 
